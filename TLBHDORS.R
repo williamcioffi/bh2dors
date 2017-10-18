@@ -58,7 +58,7 @@ TL <- c(TL, bba$TL)
 bba$BH2DORS <- bba$TL - bba$ROSTBH - bba$NOTCH2DORS
 BH2DORS <- c(BH2DORS, bba$BH2DORS)
 sp 		<- c(sp, rep("bba", nrow(bba)))
-sex 	<- c(sex, rep(bbamu$sex, nrow(bba)))
+sex 	<- c(sex, rep(bba$sex, nrow(bba)))
 
 plot(BH2DORS, TL, pch = as.numeric(as.factor(sp)), col = as.numeric(as.factor(sp)), log = 'xy')
 
