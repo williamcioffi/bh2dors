@@ -54,13 +54,25 @@ sp 		<- c(sp, rep("bmu", nrow(bmu)))
 sex 	<- c(sex, rep(bmu$sex, nrow(bmu)))
 
 #bba
+# remove fetus / very small
+bba.backup <- bba
+bba <- bba[-which(bba$TL < 400), ]
+
 TL <- c(TL, bba$TL)
 bba$BH2DORS <- bba$TL - bba$ROSTBH - bba$NOTCH2DORS
 BH2DORS <- c(BH2DORS, bba$BH2DORS)
 sp 		<- c(sp, rep("bba", nrow(bba)))
 sex 	<- c(sex, rep(bba$sex, nrow(bba)))
 
-plot(BH2DORS, TL, pch = as.numeric(as.factor(sp)), col = as.numeric(as.factor(sp)), log = 'xy')
+plot(BH2DORS, TL, 
+	pch = as.numeric(as.factor(sp)),
+ 	col = as.numeric(as.factor(sp)),
+ 	log = 'xy',
+ 	las = 1,
+ 	xlab = "blowhole to dorsal fin length (cm)",
+ 	ylab = "total length (cm)"
+ )
+
 
 lTL <- split(TL, sp)
 lBH2DORS <- split(BH2DORS, sp)
@@ -81,3 +93,5 @@ for(i in 1:length(lTL)) {
 	
 	lines(10^seq.x, 10^seq.y, lty = 2, col = cols[i])
 }
+
+legend("topleft", legend = sort(unique(sp)), col = cols, pch = sort(unique(as.numeric(as.factor(sp)))), bty = 'n')
