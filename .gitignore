@@ -1,1 +1,6 @@
+# system files
 .Rapp.history
+.DS_Store
+
+# papers
+sources/*.*
