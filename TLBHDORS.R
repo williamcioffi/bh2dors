@@ -1,14 +1,17 @@
 # quick plot of TL and BHDORS
+rt <- function(...) read.table(..., header = TRUE, sep = ',', stringsAsFactors = FALSE)
 
-ttu <- read.table("ttgraph.csv", header = TRUE, sep = ',')
-gma <- read.table("gma_scirepwhalesresinstno32_1980.csv", header = TRUE, sep = ',')
-cma <- read.table("ross_et_al_1975_caperea.csv", header = TRUE, sep = ',')
-bph <- read.table("testbp.csv", header = TRUE, sep = ',')
-bmu <- read.table("testbm.csv", header = TRUE, sep = ',')
-bba <- read.table("bba_SC01089-132.csv", header = TRUE, sep = ',')
+ttu <- rt("truncatus_cheney_et_al_2017.csv")
+tad <- rt("aduncus_vanaswegen2017.csv")
+gma <- rt("globi_yanekura_1980.csv")
+cma <- rt("caperea_ross_et_al_1975.csv")
+bph <- rt("phyalus_mackintosh_wheeler_discoveryreports_1929.csv")
+bmu <- rt("musculus_mackintosh_wheeler_discoveryreports_1929.csv")
+bba <- rt("bairdius_omura_et_al_SC01089-132.csv")
 
 #ttu in cm
 #gma in cm
+#tad in cm
 #cma TL in cm everything else in percentages
 
 TL 		<- vector()
@@ -21,6 +24,12 @@ TL 		<- c(TL, ttu$TL)
 BH2DORS <- c(BH2DORS, ttu$BH2DORS)
 sp 		<- c(sp, rep("ttu", nrow(ttu)))
 sex 	<- c(sex, rep(NA, nrow(ttu)))
+
+#tad
+TL <- c(TL, tad$TL)
+BH2DORS <- c(BH2DORS, tad$BH2DORS)
+sp <- c(sp, rep("tad", nrow(tad)))
+sex <- c(sex, tad$sex)
 
 #gma
 TL 		<- c(TL, gma$TL)
@@ -64,23 +73,30 @@ BH2DORS <- c(BH2DORS, bba$BH2DORS)
 sp 		<- c(sp, rep("bba", nrow(bba)))
 sex 	<- c(sex, rep(bba$sex, nrow(bba)))
 
-plot(BH2DORS, TL, 
-	pch = as.numeric(as.factor(sp)),
- 	col = as.numeric(as.factor(sp)),
+# paste them together
+mdf <- data.frame(tl = TL, bh2dors = BH2DORS, sp = sp, stringsAsFactors = FALSE)
+
+# make a list
+mdfl <- split(mdf, mdf$sp)
+
+# set up plot
+plot(mdf$bh2dors, mdf$tl, 
  	log = 'xy',
  	las = 1,
+ 	type = 'n',
  	xlab = "blowhole to dorsal fin length (cm)",
  	ylab = "total length (cm)"
  )
 
+library(colorspace)
+cols <- rainbow_hcl(length(mdfl))
+pchs <- 1:length(mdfl)
 
-lTL <- split(TL, sp)
-lBH2DORS <- split(BH2DORS, sp)
-cols <- sort(unique(as.numeric(as.factor(sp))))
-
-for(i in 1:length(lTL)) {
-	y <- log10(lTL[[i]])
-	x <- log10(lBH2DORS[[i]])
+for(i in 1:length(mdfl)) {
+	points(mdfl[[i]]$bh2dors, mdfl[[i]]$tl, col = cols[i], pch = pchs[i])
+	
+	y <- log10(mdfl[[i]]$tl)
+	x <- log10(mdfl[[i]]$bh2dors)
 	x.min <- min(x, na.rm = TRUE)
 	x.max <- max(x, na.rm = TRUE)
 	
@@ -94,4 +110,4 @@ for(i in 1:length(lTL)) {
 	lines(10^seq.x, 10^seq.y, lty = 2, col = cols[i])
 }
 
-legend("topleft", legend = sort(unique(sp)), col = cols, pch = sort(unique(as.numeric(as.factor(sp)))), bty = 'n')
+legend("topleft", legend = names(mdfl), col = cols, pch = pchs, bty = 'n')
