@@ -1,7 +1,7 @@
 # quick plot of TL and BHDORS
 rt <- function(...) read.table(..., header = TRUE, sep = ',', stringsAsFactors = FALSE)
 
-ttu <- rt("truncatus_cheney_et_al_2017.csv")
+ttr <- rt("truncatus_cheney_et_al_2017.csv")
 tad <- rt("aduncus_vanaswegen2017.csv")
 gma <- rt("globi_yanekura_1980.csv")
 cma <- rt("caperea_ross_et_al_1975.csv")
@@ -19,10 +19,10 @@ BH2DORS <- vector()
 sp 		<- vector()
 sex 	<- vector()
 
-#ttu
+#ttr
 TL 		<- c(TL, ttu$TL)
 BH2DORS <- c(BH2DORS, ttu$BH2DORS)
-sp 		<- c(sp, rep("ttu", nrow(ttu)))
+sp 		<- c(sp, rep("ttr", nrow(ttu)))
 sex 	<- c(sex, rep(NA, nrow(ttu)))
 
 #tad
