@@ -8,6 +8,7 @@ cma <- rt("caperea_ross_et_al_1975.csv")
 bph <- rt("phyalus_mackintosh_wheeler_discoveryreports_1929.csv")
 bmu <- rt("musculus_mackintosh_wheeler_discoveryreports_1929.csv")
 bba <- rt("bairdius_omura_et_al_SC01089-132.csv")
+psi <- rt("sinus_brownell_et_al_MMS_1987.csv")
 
 #ttu in cm
 #gma in cm
@@ -20,10 +21,10 @@ sp 		<- vector()
 sex 	<- vector()
 
 #ttr
-TL 		<- c(TL, ttu$TL)
-BH2DORS <- c(BH2DORS, ttu$BH2DORS)
-sp 		<- c(sp, rep("ttr", nrow(ttu)))
-sex 	<- c(sex, rep(NA, nrow(ttu)))
+TL 		<- c(TL, ttr$TL)
+BH2DORS <- c(BH2DORS, ttr$BH2DORS)
+sp 		<- c(sp, rep("ttr", nrow(ttr)))
+sex 	<- c(sex, rep(NA, nrow(ttr)))
 
 #tad
 TL <- c(TL, tad$TL)
@@ -45,14 +46,14 @@ TL 		<- c(TL, cma$TL)
 cma$BH2DORS <- cma$TL - cma$ROST2BH - cma$NOTCH2DORS 
 BH2DORS <- c(BH2DORS, cma$BH2DORS)
 sp 		<- c(sp, rep("cma", nrow(cma)))
-sex 	<- c(sex, rep(cma$sex, nrow(cma)))
+sex 	<- c(sex, cma$sex, nrow(cma))
 
 #bph
 TL 		<- c(TL, bph$TL*100)
 bph$BH2DORS <- bph$TL - bph$ROSTBH - bph$NOTCHTOFIN 
 BH2DORS <- c(BH2DORS, bph$BH2DORS*100)
 sp 		<- c(sp, rep("bph", nrow(bph)))
-sex 	<- c(sex, rep(bph$sex, nrow(bph)))
+sex 	<- c(sex, bph$sex, nrow(bph))
 
 
 #bmu
@@ -60,7 +61,7 @@ TL 		<- c(TL, bmu$TL*100)
 bmu$BH2DORS <- bmu$TL - bmu$ROSTBH - bmu$NOTCHTOFIN 
 BH2DORS <- c(BH2DORS, bmu$BH2DORS*100)
 sp 		<- c(sp, rep("bmu", nrow(bmu)))
-sex 	<- c(sex, rep(bmu$sex, nrow(bmu)))
+sex 	<- c(sex, bmu$sex, nrow(bmu))
 
 #bba
 # remove fetus / very small
@@ -71,7 +72,17 @@ TL <- c(TL, bba$TL)
 bba$BH2DORS <- bba$TL - bba$ROSTBH - bba$NOTCH2DORS
 BH2DORS <- c(BH2DORS, bba$BH2DORS)
 sp 		<- c(sp, rep("bba", nrow(bba)))
-sex 	<- c(sex, rep(bba$sex, nrow(bba)))
+sex 	<- c(sex, bba$sex, nrow(bba))
+
+#psi
+
+TL <- c(TL, psi$TL)
+psi$BH2DORS <- psi$JAW2DORS - psi$JAW2BLOW
+BH2DORS <- c(BH2DORS, psi$BH2DORS)
+sp 		<- c(sp, rep("psi", nrow(psi)))
+sex 	<- c(sex, psi$sex, nrow(psi))
+
+
 
 # paste them together
 mdf <- data.frame(tl = TL, bh2dors = BH2DORS, sp = sp, stringsAsFactors = FALSE)
