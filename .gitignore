@@ -1,5 +1,6 @@
 # system files
 .Rapp.history
+.Rhistory
 .DS_Store
 
 # papers
