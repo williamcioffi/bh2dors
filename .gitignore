@@ -3,5 +3,8 @@
 .Rhistory
 .DS_Store
 
+# duke info
+pdub_duke_info/
+
 # papers
 sources/
